@@ -5,256 +5,244 @@ import html
 
 OUTPUT_FILE = Path("info-card.svg")
 
-
-# --------------------------------------------------
-# Customize your profile information here
-# --------------------------------------------------
-
-USERNAME = "kumar-aditya79"
-
-INFO = [
-    ("Role", "Aspiring Data Engineer"),
-    ("Languages", "Python · SQL · C++"),
-    ("Big Data", "PySpark · Apache Spark"),
-    ("Cloud", "Azure · Databricks"),
-    ("Data", "ETL · Data Pipelines"),
-    ("Database", "MySQL · MongoDB"),
-]
-
-HIGHLIGHTS = [
-    "Building scalable data pipelines",
-    "Learning Cloud & Big Data",
-    "Exploring Azure & Databricks",
-]
-
-
-# --------------------------------------------------
-# SVG settings
-# --------------------------------------------------
-
 WIDTH = 490
-HEIGHT = 390
+HEIGHT = 430
 
 BACKGROUND = "#0d1117"
+BORDER = "#30363d"
 TEXT = "#c9d1d9"
 MUTED = "#8b949e"
-ACCENT = "#58a6ff"
+
 GREEN = "#3fb950"
-BORDER = "#30363d"
+BLUE = "#58a6ff"
+PURPLE = "#bc8cff"
+ORANGE = "#d29922"
 
 
-def escape(text):
+def esc(text):
     return html.escape(str(text))
 
 
-def create_svg():
-    lines = []
+def text(x, y, value, color=TEXT, size=13, weight="normal"):
+    return (
+        f'<text x="{x}" y="{y}" '
+        f'fill="{color}" '
+        f'font-size="{size}px" '
+        f'font-family="monospace" '
+        f'font-weight="{weight}">'
+        f'{esc(value)}</text>'
+    )
 
-    lines.append(
+
+def main():
+
+    static = os.getenv("STATIC") == "1"
+
+    svg = []
+
+    svg.append(
         f'<svg xmlns="http://www.w3.org/2000/svg" '
         f'width="{WIDTH}" height="{HEIGHT}" '
         f'viewBox="0 0 {WIDTH} {HEIGHT}">'
     )
 
-    # --------------------------------------------------
-    # Animation
-    # --------------------------------------------------
+    svg.append(f"""
+<style>
 
-    lines.append("""
-    <style>
+.card-line {{
+    opacity: 0;
+    animation: fadeIn 0.45s ease forwards;
+}}
 
-        .terminal {
-            font-family:
-                "JetBrains Mono",
-                "Cascadia Code",
-                "Courier New",
-                monospace;
-        }
+@keyframes fadeIn {{
+    from {{
+        opacity: 0;
+        transform: translateX(-8px);
+    }}
 
-        .fade {
-            opacity: 0;
-            animation: fadeIn 0.6s ease forwards;
-        }
+    to {{
+        opacity: 1;
+        transform: translateX(0);
+    }}
+}}
 
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(6px);
-            }
+</style>
+""")
 
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-    </style>
-    """)
-
-    # --------------------------------------------------
-    # Background
-    # --------------------------------------------------
-
-    lines.append(
-        f'<rect width="{WIDTH}" height="{HEIGHT}" '
-        f'rx="12" fill="{BACKGROUND}" '
-        f'stroke="{BORDER}" stroke-width="1"/>'
+    # Card background
+    svg.append(
+        f'<rect x="0" y="0" '
+        f'width="{WIDTH}" height="{HEIGHT}" '
+        f'rx="8" '
+        f'fill="{BACKGROUND}" '
+        f'stroke="{BORDER}"/>'
     )
 
-    # --------------------------------------------------
-    # Terminal header
-    # --------------------------------------------------
-
-    lines.append(
-        '<circle cx="20" cy="20" r="5" fill="#ff5f56"/>'
+    # Terminal title bar
+    svg.append(
+        f'<circle cx="18" cy="18" r="5" fill="#ff5f56"/>'
     )
 
-    lines.append(
-        '<circle cx="38" cy="20" r="5" fill="#ffbd2e"/>'
+    svg.append(
+        f'<circle cx="36" cy="18" r="5" fill="#ffbd2e"/>'
     )
 
-    lines.append(
-        '<circle cx="56" cy="20" r="5" fill="#27c93f"/>'
+    svg.append(
+        f'<circle cx="54" cy="18" r="5" fill="#27c93f"/>'
     )
 
-    lines.append(
-        f'<text x="75" y="25" '
-        f'fill="{MUTED}" font-size="12" '
-        f'class="terminal">'
-        f'{escape(USERNAME)}@github'
-        f'</text>'
+    svg.append(
+        text(
+            75,
+            22,
+            "kumar-aditya79@github",
+            MUTED,
+            11
+        )
     )
 
-    # --------------------------------------------------
-    # Command
-    # --------------------------------------------------
-
-    lines.append(
-        f'<text x="25" y="62" '
-        f'fill="{GREEN}" font-size="14" '
-        f'class="terminal">'
-        f'$ whoami'
-        f'</text>'
+    # Main command
+    svg.append(
+        text(
+            22,
+            55,
+            "$ whoami",
+            GREEN,
+            12
+        )
     )
 
-    # --------------------------------------------------
-    # Information rows
-    # --------------------------------------------------
+    # Profile information
+    rows = [
+        ("Role", "Aspiring Data Engineer", BLUE),
+        ("Focus", "Data Engineering & Big Data", PURPLE),
+        ("Stack", "Python · SQL · PySpark", BLUE),
+        ("Cloud", "Azure · Databricks", ORANGE),
+        ("Data", "ETL · Data Pipelines", GREEN),
+        ("Tools", "Git · GitHub · Docker", BLUE),
+    ]
 
-    y = 92
+    start_y = 88
+    row_gap = 34
 
-    for index, (key, value) in enumerate(INFO):
+    for index, (key, value, color) in enumerate(rows):
 
-        delay = 0.3 + index * 0.15
+        y = start_y + index * row_gap
 
-        lines.append(
-            f'<g class="fade" '
+        delay = index * 0.10
+
+        if static:
+            delay = 0
+
+        svg.append(
+            f'<g class="card-line" '
             f'style="animation-delay:{delay:.2f}s">'
         )
 
-        lines.append(
-            f'<text x="25" y="{y}" '
-            f'fill="{ACCENT}" '
-            f'font-size="13" '
-            f'font-weight="bold" '
-            f'class="terminal">'
-            f'{escape(key)}'
-            f'</text>'
+        svg.append(
+            text(
+                25,
+                y,
+                f"{key}:",
+                color,
+                12,
+                "bold"
+            )
         )
 
-        lines.append(
-            f'<text x="125" y="{y}" '
-            f'fill="{TEXT}" '
-            f'font-size="13" '
-            f'class="terminal">'
-            f'{escape(value)}'
-            f'</text>'
+        svg.append(
+            text(
+                105,
+                y,
+                value,
+                TEXT,
+                12
+            )
         )
 
-        lines.append("</g>")
+        svg.append("</g>")
 
-        y += 32
+    # Separator
+    separator_y = 300
 
-    # --------------------------------------------------
+    svg.append(
+        f'<line x1="22" y1="{separator_y}" '
+        f'x2="{WIDTH - 22}" y2="{separator_y}" '
+        f'stroke="{BORDER}"/>'
+    )
+
     # Highlights heading
-    # --------------------------------------------------
-
-    delay = 0.3 + len(INFO) * 0.15
-
-    lines.append(
-        f'<g class="fade" '
-        f'style="animation-delay:{delay:.2f}s">'
+    svg.append(
+        text(
+            22,
+            328,
+            "$ highlights",
+            GREEN,
+            12
+        )
     )
 
-    lines.append(
-        f'<text x="25" y="{y + 10}" '
-        f'fill="{GREEN}" '
-        f'font-size="14" '
-        f'class="terminal">'
-        f'$ highlights'
-        f'</text>'
-    )
+    highlights = [
+        "Building scalable data pipelines",
+        "Learning Cloud & Big Data",
+        "Exploring Databricks",
+    ]
 
-    lines.append("</g>")
+    highlight_start = 355
+    highlight_gap = 23
 
-    y += 40
+    for index, value in enumerate(highlights):
 
-    # --------------------------------------------------
-    # Highlight items
-    # --------------------------------------------------
+        y = (
+            highlight_start
+            + index * highlight_gap
+        )
 
-    for index, highlight in enumerate(HIGHLIGHTS):
+        delay = (
+            (len(rows) + index)
+            * 0.10
+        )
 
-        delay = 1.3 + index * 0.18
+        if static:
+            delay = 0
 
-        lines.append(
-            f'<g class="fade" '
+        svg.append(
+            f'<g class="card-line" '
             f'style="animation-delay:{delay:.2f}s">'
         )
 
-        lines.append(
-            f'<text x="30" y="{y}" '
-            f'fill="{MUTED}" '
-            f'font-size="12" '
-            f'class="terminal">'
-            f'→ {escape(highlight)}'
-            f'</text>'
+        svg.append(
+            text(
+                30,
+                y,
+                f"→ {value}",
+                TEXT,
+                11
+            )
         )
 
-        lines.append("</g>")
+        svg.append("</g>")
 
-        y += 25
+    # Final command
+    final_y = 420
 
-    # --------------------------------------------------
-    # Bottom command
-    # --------------------------------------------------
-
-    lines.append(
-        f'<text x="25" y="{HEIGHT - 18}" '
-        f'fill="{GREEN}" '
-        f'font-size="12" '
-        f'class="terminal">'
-        f'$ echo "keep building..."'
-        f'</text>'
+    svg.append(
+        text(
+            22,
+            final_y,
+            '$ echo "Keep building"',
+            GREEN,
+            11
+        )
     )
 
-    lines.append("</svg>")
-
-    return "\n".join(lines)
-
-
-def main():
-
-    print("Generating info card...")
-
-    svg = create_svg()
+    svg.append("</svg>")
 
     OUTPUT_FILE.write_text(
-        svg,
+        "\n".join(svg),
         encoding="utf-8"
     )
 
-    print()
     print("Done!")
     print(f"Created: {OUTPUT_FILE}")
 
