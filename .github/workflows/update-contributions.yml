@@ -35,14 +35,6 @@ jobs:
         run: |
           python scripts/render_heatmap_svg.py
 
-      - name: Generate ASCII portrait
-        run: |
-          python scripts/make_ascii_svg.py
-
-      - name: Generate info card
-        run: |
-          python scripts/make_info_card.py
-
       - name: Commit updated files
         run: |
           git config user.name "github-actions[bot]"
