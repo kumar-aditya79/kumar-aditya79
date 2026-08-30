@@ -1,5 +1,7 @@
 <div align="center">
 
+<!--Who I am starting -->
+  
 <h3>
 <code>Who am I</code>
 </h3>
@@ -16,13 +18,19 @@
 </tr>
 </table>
 
+<!--Who I am end -->
+
 <br><br>
+
+<!--contribution starting -->
 
 <h3>
 <code>contributions</code>
 </h3>
 
 <img src="./contrib-heatmap.svg" width="860" />
+
+<!--contribution starting -->
 
 </div>
 
