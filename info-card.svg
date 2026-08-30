@@ -1,75 +1,72 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="490" height="390" viewBox="0 0 490 390">
+<svg xmlns="http://www.w3.org/2000/svg" width="490" height="470" viewBox="0 0 490 470">
 
-    <style>
+<style>
 
-        .terminal {
-            font-family:
-                "JetBrains Mono",
-                "Cascadia Code",
-                "Courier New",
-                monospace;
-        }
+.line {
+    opacity: 0;
+    animation: fadeIn 0.55s ease forwards;
+}
 
-        .fade {
-            opacity: 0;
-            animation: fadeIn 0.6s ease forwards;
-        }
+@keyframes fadeIn {
 
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(6px);
-            }
+    from {
+        opacity: 0;
+        transform: translateX(-10px);
+    }
 
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
 
-    </style>
-    
-<rect width="490" height="390" rx="12" fill="#0d1117" stroke="#30363d" stroke-width="1"/>
-<circle cx="20" cy="20" r="5" fill="#ff5f56"/>
-<circle cx="38" cy="20" r="5" fill="#ffbd2e"/>
-<circle cx="56" cy="20" r="5" fill="#27c93f"/>
-<text x="75" y="25" fill="#8b949e" font-size="12" class="terminal">kumar-aditya79@github</text>
-<text x="25" y="62" fill="#3fb950" font-size="14" class="terminal">$ whoami</text>
-<g class="fade" style="animation-delay:0.30s">
-<text x="25" y="92" fill="#58a6ff" font-size="13" font-weight="bold" class="terminal">Role</text>
-<text x="125" y="92" fill="#c9d1d9" font-size="13" class="terminal">Aspiring Data Engineer</text>
+}
+
+</style>
+
+<rect x="0" y="0" width="490" height="470" rx="8" fill="#0d1117" stroke="#30363d"/>
+<circle cx="18" cy="18" r="5" fill="#ff5f56"/>
+<circle cx="36" cy="18" r="5" fill="#ffbd2e"/>
+<circle cx="54" cy="18" r="5" fill="#27c93f"/>
+<text x="75" y="22" fill="#8b949e" font-size="11px" font-family="monospace" font-weight="normal">kumar-aditya79@github</text>
+<text x="22" y="55" fill="#3fb950" font-size="12px" font-family="monospace" font-weight="normal">$ whoami</text>
+<g class="line" style="animation-delay:0.00s">
+<text x="25" y="88" fill="#58a6ff" font-size="12px" font-family="monospace" font-weight="bold">Role</text>
+<text x="120" y="88" fill="#c9d1d9" font-size="12px" font-family="monospace" font-weight="normal">Aspiring Data Engineer</text>
 </g>
-<g class="fade" style="animation-delay:0.45s">
-<text x="25" y="124" fill="#58a6ff" font-size="13" font-weight="bold" class="terminal">Languages</text>
-<text x="125" y="124" fill="#c9d1d9" font-size="13" class="terminal">Python · SQL · C++</text>
+<g class="line" style="animation-delay:0.12s">
+<text x="25" y="122" fill="#58a6ff" font-size="12px" font-family="monospace" font-weight="bold">Languages</text>
+<text x="120" y="122" fill="#c9d1d9" font-size="12px" font-family="monospace" font-weight="normal">Python · SQL · C++</text>
 </g>
-<g class="fade" style="animation-delay:0.60s">
-<text x="25" y="156" fill="#58a6ff" font-size="13" font-weight="bold" class="terminal">Big Data</text>
-<text x="125" y="156" fill="#c9d1d9" font-size="13" class="terminal">PySpark · Apache Spark</text>
+<g class="line" style="animation-delay:0.24s">
+<text x="25" y="156" fill="#58a6ff" font-size="12px" font-family="monospace" font-weight="bold">Big Data</text>
+<text x="120" y="156" fill="#c9d1d9" font-size="12px" font-family="monospace" font-weight="normal">PySpark · Apache Spark</text>
 </g>
-<g class="fade" style="animation-delay:0.75s">
-<text x="25" y="188" fill="#58a6ff" font-size="13" font-weight="bold" class="terminal">Cloud</text>
-<text x="125" y="188" fill="#c9d1d9" font-size="13" class="terminal">Azure · Databricks</text>
+<g class="line" style="animation-delay:0.36s">
+<text x="25" y="190" fill="#58a6ff" font-size="12px" font-family="monospace" font-weight="bold">Cloud</text>
+<text x="120" y="190" fill="#c9d1d9" font-size="12px" font-family="monospace" font-weight="normal">Azure · Databricks</text>
 </g>
-<g class="fade" style="animation-delay:0.90s">
-<text x="25" y="220" fill="#58a6ff" font-size="13" font-weight="bold" class="terminal">Data</text>
-<text x="125" y="220" fill="#c9d1d9" font-size="13" class="terminal">ETL · Data Pipelines</text>
+<g class="line" style="animation-delay:0.48s">
+<text x="25" y="224" fill="#58a6ff" font-size="12px" font-family="monospace" font-weight="bold">Data</text>
+<text x="120" y="224" fill="#c9d1d9" font-size="12px" font-family="monospace" font-weight="normal">ETL · Data Pipelines</text>
 </g>
-<g class="fade" style="animation-delay:1.05s">
-<text x="25" y="252" fill="#58a6ff" font-size="13" font-weight="bold" class="terminal">Database</text>
-<text x="125" y="252" fill="#c9d1d9" font-size="13" class="terminal">MySQL · MongoDB</text>
+<g class="line" style="animation-delay:0.60s">
+<text x="25" y="258" fill="#58a6ff" font-size="12px" font-family="monospace" font-weight="bold">Database</text>
+<text x="120" y="258" fill="#c9d1d9" font-size="12px" font-family="monospace" font-weight="normal">MySQL · MongoDB</text>
 </g>
-<g class="fade" style="animation-delay:1.20s">
-<text x="25" y="294" fill="#3fb950" font-size="14" class="terminal">$ highlights</text>
+<line x1="22" y1="300" x2="468" y2="300" stroke="#30363d"/>
+<g class="line" style="animation-delay:0.85s">
+<text x="22" y="328" fill="#3fb950" font-size="12px" font-family="monospace" font-weight="normal">$ highlights</text>
 </g>
-<g class="fade" style="animation-delay:1.30s">
-<text x="30" y="324" fill="#8b949e" font-size="12" class="terminal">→ Building scalable data pipelines</text>
+<g class="line" style="animation-delay:1.00s">
+<text x="30" y="358" fill="#c9d1d9" font-size="11px" font-family="monospace" font-weight="normal">→ Building scalable data pipelines</text>
 </g>
-<g class="fade" style="animation-delay:1.48s">
-<text x="30" y="349" fill="#8b949e" font-size="12" class="terminal">→ Learning Cloud &amp; Big Data</text>
+<g class="line" style="animation-delay:1.15s">
+<text x="30" y="383" fill="#c9d1d9" font-size="11px" font-family="monospace" font-weight="normal">→ Learning Cloud &amp; Big Data</text>
 </g>
-<g class="fade" style="animation-delay:1.66s">
-<text x="30" y="374" fill="#8b949e" font-size="12" class="terminal">→ Exploring Azure &amp; Databricks</text>
+<g class="line" style="animation-delay:1.30s">
+<text x="30" y="408" fill="#c9d1d9" font-size="11px" font-family="monospace" font-weight="normal">→ Exploring Databricks</text>
 </g>
-<text x="25" y="372" fill="#3fb950" font-size="12" class="terminal">$ echo "keep building..."</text>
+<g class="line" style="animation-delay:1.55s">
+<text x="22" y="445" fill="#3fb950" font-size="11px" font-family="monospace" font-weight="normal">$ echo &quot;Keep building&quot;</text>
+</g>
 </svg>

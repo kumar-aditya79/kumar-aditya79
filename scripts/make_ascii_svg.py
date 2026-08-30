@@ -1,186 +1,427 @@
 from pathlib import Path
 import html
-import math
 
+import cv2
 import numpy as np
-from PIL import Image
 
 
 INPUT_FILE = Path("source-prepped.png")
 OUTPUT_FILE = Path("avi-ascii.svg")
 
-# ASCII characters from light → dark
-RAMP = " .`:-=+*cs#%@"
+RAMP = " .:-=+*#%@"
 
-# Character grid
-COLUMNS = 100
+CHAR_WIDTH = 90
+CHAR_ASPECT = 0.50
 
-# Animation settings
-ROW_DURATION = 0.12
-CURSOR_WIDTH = 18
+CHAR_WIDTH_PX = 5.2
+LINE_HEIGHT = 8.5
 
-
-def brightness_to_char(value):
-    """Convert brightness (0-255) to an ASCII character."""
-    index = int((255 - value) / 255 * (len(RAMP) - 1))
-    return RAMP[index]
+TEXT_COLOR = "#c9d1d9"
 
 
 def load_image():
+
     if not INPUT_FILE.exists():
         raise FileNotFoundError(
-            f"{INPUT_FILE} was not found. "
-            "Run prep_photo.py first."
+            f"{INPUT_FILE} was not found."
         )
 
-    image = Image.open(INPUT_FILE).convert("L")
+    image = cv2.imread(
+        str(INPUT_FILE),
+        cv2.IMREAD_GRAYSCALE
+    )
 
-    width, height = image.size
+    if image is None:
+        raise RuntimeError(
+            f"Could not read {INPUT_FILE}"
+        )
 
-    # Characters are taller than they are wide, so compensate
-    # for character aspect ratio.
-    char_aspect = 0.5
+    return image
 
-    rows = max(
+
+def crop_to_subject(image):
+
+    mask = image < 245
+
+    ys, xs = np.where(mask)
+
+    if len(xs) == 0:
+        return image
+
+    x1 = max(0, xs.min() - 10)
+    x2 = min(image.shape[1], xs.max() + 11)
+
+    y1 = max(0, ys.min() - 10)
+    y2 = min(image.shape[0], ys.max() + 11)
+
+    return image[y1:y2, x1:x2]
+
+
+def resize_for_ascii(image):
+
+    height, width = image.shape
+
+    char_height = max(
         1,
-        int(height / width * COLUMNS * char_aspect)
+        int(
+            CHAR_WIDTH
+            * height
+            / width
+            * CHAR_ASPECT
+        )
     )
 
-    image = image.resize(
-        (COLUMNS, rows),
-        Image.Resampling.LANCZOS
+    return cv2.resize(
+        image,
+        (CHAR_WIDTH, char_height),
+        interpolation=cv2.INTER_AREA
     )
 
-    return np.array(image)
+
+def pixel_to_char(value):
+
+    index = int(
+        (255 - int(value))
+        / 255
+        * (len(RAMP) - 1)
+    )
+
+    index = max(
+        0,
+        min(index, len(RAMP) - 1)
+    )
+
+    return RAMP[index]
 
 
-def build_ascii(image):
+def make_ascii(image):
+
     rows = []
 
     for row in image:
-        text = "".join(
-            brightness_to_char(pixel)
-            for pixel in row
-        )
-        rows.append(text)
+
+        line = ""
+
+        for pixel in row:
+            line += pixel_to_char(pixel)
+
+        rows.append(line.rstrip())
+
+    while rows and not rows[0].strip():
+        rows.pop(0)
+
+    while rows and not rows[-1].strip():
+        rows.pop()
 
     return rows
 
 
+def escape_xml(text):
+    return html.escape(text)
+
+
 def create_svg(rows):
-    rows_count = len(rows)
 
-    char_width = 8
-    char_height = 14
+    if not rows:
+        raise RuntimeError(
+            "ASCII conversion produced no output."
+        )
 
-    width = COLUMNS * char_width
-    height = rows_count * char_height
-
-    escaped_rows = [
-        html.escape(row)
+    max_chars = max(
+        len(row)
         for row in rows
-    ]
+    )
+
+    width = int(
+        max_chars * CHAR_WIDTH_PX
+    ) + 60
+
+    height = int(
+        len(rows) * LINE_HEIGHT
+    ) + 60
+
+    portrait_top = 35
+
+    portrait_height = (
+        len(rows) * LINE_HEIGHT
+    )
+
+    # Total duration of the complete scan
+    SCAN_DURATION = 4.0
 
     svg = []
 
+    # ==================================================
+    # SVG
+    # ==================================================
+
     svg.append(
         f'<svg xmlns="http://www.w3.org/2000/svg" '
-        f'width="{width}" height="{height}" '
+        f'width="{width}" '
+        f'height="{height}" '
         f'viewBox="0 0 {width} {height}">'
     )
 
+    # ==================================================
+    # DEFINITIONS
+    # ==================================================
+
     svg.append("""
-    <style>
-        .ascii {
-            font-family: "Courier New", monospace;
-            font-size: 14px;
-            font-weight: 400;
-            fill: #b8b8b8;
-        }
+<defs>
 
-        .cursor {
-            fill: #b8b8b8;
-            opacity: 0.9;
-        }
+    <filter
+        id="scanGlow"
+        x="-50%"
+        y="-500%"
+        width="200%"
+        height="1100%"
+    >
 
-        @keyframes reveal {
-            from {
-                transform: translateX(-100%);
-            }
-            to {
-                transform: translateX(0);
-            }
-        }
+        <feGaussianBlur
+            stdDeviation="4"
+            result="blur"
+        />
 
-        .reveal {
-            animation-name: reveal;
-            animation-timing-function: linear;
-            animation-fill-mode: forwards;
-        }
-    </style>
-    """)
+        <feMerge>
 
-    # Define clipping paths for every row.
-    svg.append("<defs>")
+            <feMergeNode in="blur"/>
+            <feMergeNode in="SourceGraphic"/>
 
-    for i in range(rows_count):
-        y = i * char_height
+        </feMerge>
 
-        svg.append(
-            f'<clipPath id="clip-{i}">'
-            f'<rect x="0" y="{y}" '
-            f'width="{width}" height="{char_height}" />'
-            f'</clipPath>'
-        )
+    </filter>
 
-    svg.append("</defs>")
+</defs>
+""")
 
-    # Draw each row.
-    for i, row in enumerate(escaped_rows):
-        y = (i + 1) * char_height - 2
+    # ==================================================
+    # CSS
+    # ==================================================
 
-        delay = i * ROW_DURATION
+    svg.append(f"""
+<style>
 
-        svg.append(
-            f'<g clip-path="url(#clip-{i})" '
-            f'style="animation-delay:{delay:.2f}s">'
-        )
+.ascii {{
+    font-family:
+        "Cascadia Mono",
+        "Consolas",
+        "Courier New",
+        monospace;
 
-        svg.append(
-            f'<text class="ascii" '
-            f'x="0" y="{y}">{row}</text>'
-        )
+    font-size: 7px;
+    font-weight: 500;
+    letter-spacing: 0;
+}}
 
-        svg.append("</g>")
 
-    # Cursor-like wipe.
-    total_duration = rows_count * ROW_DURATION
+/* ==============================================
+   LINE-BY-LINE REVEAL
+   ============================================== */
+
+.ascii-row {{
+
+    opacity: 0;
+
+    animation:
+        revealRow {SCAN_DURATION}s
+        linear forwards;
+
+}}
+
+
+@keyframes revealRow {{
+
+    0% {{
+        opacity: 0;
+    }}
+
+    5% {{
+        opacity: 0;
+    }}
+
+    100% {{
+        opacity: 1;
+    }}
+
+}}
+
+
+/* ==============================================
+   GREEN LASER
+   Runs ONLY ONCE
+   ============================================== */
+
+.scanner {{
+
+    animation:
+        scanDown {SCAN_DURATION}s
+        linear forwards;
+
+}}
+
+
+@keyframes scanDown {{
+
+    0% {{
+        transform:
+            translateY(0px);
+
+        opacity: 1;
+    }}
+
+    5% {{
+        opacity: 1;
+    }}
+
+    95% {{
+        opacity: 1;
+    }}
+
+    100% {{
+        transform:
+            translateY({portrait_height}px);
+
+        opacity: 0;
+    }}
+
+}}
+
+
+/* ==============================================
+   SCANNER GLOW
+   ============================================== */
+
+.scanner-glow {{
+
+    animation:
+        scanDown {SCAN_DURATION}s
+        linear forwards;
+
+}}
+
+</style>
+""")
+
+    # ==================================================
+    # BACKGROUND
+    # ==================================================
 
     svg.append(
-        f"""
-        <rect
-            class="cursor"
-            x="0"
-            y="0"
-            width="{CURSOR_WIDTH}"
-            height="{height}"
-            opacity="0">
-            <animate
-                attributeName="x"
-                from="0"
-                to="{width}"
-                dur="{total_duration:.2f}s"
-                fill="freeze"
-            />
-            <animate
-                attributeName="opacity"
-                values="0;1;1;0"
-                keyTimes="0;0.02;0.95;1"
-                dur="{total_duration:.2f}s"
-                fill="freeze"
-            />
-        </rect>
-        """
+        f'<rect '
+        f'x="0" '
+        f'y="0" '
+        f'width="{width}" '
+        f'height="{height}" '
+        f'rx="8" '
+        f'fill="#0d1117"/>'
+    )
+
+    # ==================================================
+    # TERMINAL COMMAND
+    # ==================================================
+
+    svg.append(
+        '<text '
+        'x="20" '
+        'y="18" '
+        'fill="#3fb950" '
+        'font-size="10px" '
+        'font-family="monospace">'
+        '$ cat avi-ascii.svg'
+        '</text>'
+    )
+
+    # ==================================================
+    # ASCII PORTRAIT
+    # ==================================================
+
+    total_rows = len(rows)
+
+    for index, row in enumerate(rows):
+
+        row_width = (
+            len(row)
+            * CHAR_WIDTH_PX
+        )
+
+        x = (
+            width
+            - row_width
+        ) / 2
+
+        y = (
+            portrait_top
+            + index
+            * LINE_HEIGHT
+        )
+
+        # Each row appears as the scanner
+        # reaches approximately that row.
+
+        delay = (
+            index
+            / max(total_rows - 1, 1)
+            * SCAN_DURATION
+        )
+
+        svg.append(
+            f'<text '
+            f'x="{x:.2f}" '
+            f'y="{y:.2f}" '
+            f'fill="{TEXT_COLOR}" '
+            f'class="ascii ascii-row" '
+            f'style="animation-delay:{delay:.3f}s">'
+            f'{escape_xml(row)}'
+            f'</text>'
+        )
+
+    # ==================================================
+    # GREEN LASER
+    # ==================================================
+
+    scanner_y = portrait_top - 5
+
+    # Glow
+    svg.append(
+        f'<rect '
+        f'x="0" '
+        f'y="{scanner_y}" '
+        f'width="{width}" '
+        f'height="8" '
+        f'rx="4" '
+        f'fill="#39d353" '
+        f'opacity="0.25" '
+        f'filter="url(#scanGlow)" '
+        f'class="scanner-glow"/>'
+    )
+
+    # Main laser
+    svg.append(
+        f'<rect '
+        f'x="0" '
+        f'y="{scanner_y}" '
+        f'width="{width}" '
+        f'height="2" '
+        f'rx="1" '
+        f'fill="#39d353" '
+        f'opacity="1" '
+        f'filter="url(#scanGlow)" '
+        f'class="scanner"/>'
+    )
+
+    # ==================================================
+    # FOOTER
+    # ==================================================
+
+    svg.append(
+        f'<text '
+        f'x="20" '
+        f'y="{height - 15}" '
+        f'fill="#3fb950" '
+        f'font-size="9px" '
+        f'font-family="monospace">'
+        f'github.com/kumar-aditya79'
+        f'</text>'
     )
 
     svg.append("</svg>")
@@ -189,18 +430,40 @@ def create_svg(rows):
 
 
 def main():
-    print("Loading prepared image...")
+
+    print("Loading processed photo...")
 
     image = load_image()
 
     print(
-        f"Creating ASCII grid: "
-        f"{image.shape[1]} × {image.shape[0]}"
+        f"Original image: "
+        f"{image.shape[1]} × "
+        f"{image.shape[0]}"
     )
 
-    rows = build_ascii(image)
+    print("Finding subject...")
 
-    print("Generating animated SVG...")
+    image = crop_to_subject(image)
+
+    print(
+        f"Cropped image: "
+        f"{image.shape[1]} × "
+        f"{image.shape[0]}"
+    )
+
+    print("Converting to ASCII...")
+
+    image = resize_for_ascii(image)
+
+    rows = make_ascii(image)
+
+    print(
+        f"ASCII size: "
+        f"{len(rows)} rows × "
+        f"{CHAR_WIDTH} columns"
+    )
+
+    print("Generating scan + reveal animation...")
 
     svg = create_svg(rows)
 
@@ -211,7 +474,9 @@ def main():
 
     print()
     print("Done!")
-    print(f"Created: {OUTPUT_FILE}")
+    print(
+        f"Created: {OUTPUT_FILE}"
+    )
 
 
 if __name__ == "__main__":
