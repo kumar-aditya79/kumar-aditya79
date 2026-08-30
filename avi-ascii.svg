@@ -1,0 +1,218 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="560" viewBox="0 0 800 560">
+
+    <style>
+        .ascii {
+            font-family: "Courier New", monospace;
+            font-size: 14px;
+            font-weight: 400;
+            fill: #b8b8b8;
+        }
+
+        .cursor {
+            fill: #b8b8b8;
+            opacity: 0.9;
+        }
+
+        @keyframes reveal {
+            from {
+                transform: translateX(-100%);
+            }
+            to {
+                transform: translateX(0);
+            }
+        }
+
+        .reveal {
+            animation-name: reveal;
+            animation-timing-function: linear;
+            animation-fill-mode: forwards;
+        }
+    </style>
+    
+<defs>
+<clipPath id="clip-0"><rect x="0" y="0" width="800" height="14" /></clipPath>
+<clipPath id="clip-1"><rect x="0" y="14" width="800" height="14" /></clipPath>
+<clipPath id="clip-2"><rect x="0" y="28" width="800" height="14" /></clipPath>
+<clipPath id="clip-3"><rect x="0" y="42" width="800" height="14" /></clipPath>
+<clipPath id="clip-4"><rect x="0" y="56" width="800" height="14" /></clipPath>
+<clipPath id="clip-5"><rect x="0" y="70" width="800" height="14" /></clipPath>
+<clipPath id="clip-6"><rect x="0" y="84" width="800" height="14" /></clipPath>
+<clipPath id="clip-7"><rect x="0" y="98" width="800" height="14" /></clipPath>
+<clipPath id="clip-8"><rect x="0" y="112" width="800" height="14" /></clipPath>
+<clipPath id="clip-9"><rect x="0" y="126" width="800" height="14" /></clipPath>
+<clipPath id="clip-10"><rect x="0" y="140" width="800" height="14" /></clipPath>
+<clipPath id="clip-11"><rect x="0" y="154" width="800" height="14" /></clipPath>
+<clipPath id="clip-12"><rect x="0" y="168" width="800" height="14" /></clipPath>
+<clipPath id="clip-13"><rect x="0" y="182" width="800" height="14" /></clipPath>
+<clipPath id="clip-14"><rect x="0" y="196" width="800" height="14" /></clipPath>
+<clipPath id="clip-15"><rect x="0" y="210" width="800" height="14" /></clipPath>
+<clipPath id="clip-16"><rect x="0" y="224" width="800" height="14" /></clipPath>
+<clipPath id="clip-17"><rect x="0" y="238" width="800" height="14" /></clipPath>
+<clipPath id="clip-18"><rect x="0" y="252" width="800" height="14" /></clipPath>
+<clipPath id="clip-19"><rect x="0" y="266" width="800" height="14" /></clipPath>
+<clipPath id="clip-20"><rect x="0" y="280" width="800" height="14" /></clipPath>
+<clipPath id="clip-21"><rect x="0" y="294" width="800" height="14" /></clipPath>
+<clipPath id="clip-22"><rect x="0" y="308" width="800" height="14" /></clipPath>
+<clipPath id="clip-23"><rect x="0" y="322" width="800" height="14" /></clipPath>
+<clipPath id="clip-24"><rect x="0" y="336" width="800" height="14" /></clipPath>
+<clipPath id="clip-25"><rect x="0" y="350" width="800" height="14" /></clipPath>
+<clipPath id="clip-26"><rect x="0" y="364" width="800" height="14" /></clipPath>
+<clipPath id="clip-27"><rect x="0" y="378" width="800" height="14" /></clipPath>
+<clipPath id="clip-28"><rect x="0" y="392" width="800" height="14" /></clipPath>
+<clipPath id="clip-29"><rect x="0" y="406" width="800" height="14" /></clipPath>
+<clipPath id="clip-30"><rect x="0" y="420" width="800" height="14" /></clipPath>
+<clipPath id="clip-31"><rect x="0" y="434" width="800" height="14" /></clipPath>
+<clipPath id="clip-32"><rect x="0" y="448" width="800" height="14" /></clipPath>
+<clipPath id="clip-33"><rect x="0" y="462" width="800" height="14" /></clipPath>
+<clipPath id="clip-34"><rect x="0" y="476" width="800" height="14" /></clipPath>
+<clipPath id="clip-35"><rect x="0" y="490" width="800" height="14" /></clipPath>
+<clipPath id="clip-36"><rect x="0" y="504" width="800" height="14" /></clipPath>
+<clipPath id="clip-37"><rect x="0" y="518" width="800" height="14" /></clipPath>
+<clipPath id="clip-38"><rect x="0" y="532" width="800" height="14" /></clipPath>
+<clipPath id="clip-39"><rect x="0" y="546" width="800" height="14" /></clipPath>
+</defs>
+<g clip-path="url(#clip-0)" style="animation-delay:0.00s">
+<text class="ascii" x="0" y="12">                                                                                                    </text>
+</g>
+<g clip-path="url(#clip-1)" style="animation-delay:0.12s">
+<text class="ascii" x="0" y="26">                                                                                                    </text>
+</g>
+<g clip-path="url(#clip-2)" style="animation-delay:0.24s">
+<text class="ascii" x="0" y="40">                                                                                                    </text>
+</g>
+<g clip-path="url(#clip-3)" style="animation-delay:0.36s">
+<text class="ascii" x="0" y="54">                                                                                                    </text>
+</g>
+<g clip-path="url(#clip-4)" style="animation-delay:0.48s">
+<text class="ascii" x="0" y="68">                                                                                                    </text>
+</g>
+<g clip-path="url(#clip-5)" style="animation-delay:0.60s">
+<text class="ascii" x="0" y="82">                                                                                                    </text>
+</g>
+<g clip-path="url(#clip-6)" style="animation-delay:0.72s">
+<text class="ascii" x="0" y="96">                                                                                                    </text>
+</g>
+<g clip-path="url(#clip-7)" style="animation-delay:0.84s">
+<text class="ascii" x="0" y="110">                                               .`:``.                                               </text>
+</g>
+<g clip-path="url(#clip-8)" style="animation-delay:0.96s">
+<text class="ascii" x="0" y="124">                                            -+s##%#ssc+.                                            </text>
+</g>
+<g clip-path="url(#clip-9)" style="animation-delay:1.08s">
+<text class="ascii" x="0" y="138">                                          :c%%%%%%%%ss##:                                           </text>
+</g>
+<g clip-path="url(#clip-10)" style="animation-delay:1.20s">
+<text class="ascii" x="0" y="152">                                         `#%#ss*++++cs#%+                                           </text>
+</g>
+<g clip-path="url(#clip-11)" style="animation-delay:1.32s">
+<text class="ascii" x="0" y="166">                                         .s%sccc=:--=-+%c                                           </text>
+</g>
+<g clip-path="url(#clip-12)" style="animation-delay:1.44s">
+<text class="ascii" x="0" y="180">                                          c#***cs:-c*=-s*                                           </text>
+</g>
+<g clip-path="url(#clip-13)" style="animation-delay:1.56s">
+<text class="ascii" x="0" y="194">                                          +c=-:=+:`::`:+`                                           </text>
+</g>
+<g clip-path="url(#clip-14)" style="animation-delay:1.68s">
+<text class="ascii" x="0" y="208">                                          .=c+csc+==+==:                                            </text>
+</g>
+<g clip-path="url(#clip-15)" style="animation-delay:1.80s">
+<text class="ascii" x="0" y="222">                                            +c**+=:--+=                                             </text>
+</g>
+<g clip-path="url(#clip-16)" style="animation-delay:1.92s">
+<text class="ascii" x="0" y="236">                                            :ss*+=--*=                                              </text>
+</g>
+<g clip-path="url(#clip-17)" style="animation-delay:2.04s">
+<text class="ascii" x="0" y="250">                                          .+*ccsccc+-=`                                             </text>
+</g>
+<g clip-path="url(#clip-18)" style="animation-delay:2.16s">
+<text class="ascii" x="0" y="264">                                   .:-+*c*c#cs*+*+-`:s#+:.                                          </text>
+</g>
+<g clip-path="url(#clip-19)" style="animation-delay:2.28s">
+<text class="ascii" x="0" y="278">                               -ccs###########c=--:=s####sc=:.                                      </text>
+</g>
+<g clip-path="url(#clip-20)" style="animation-delay:2.40s">
+<text class="ascii" x="0" y="292">                              `####sss##ss#s#%%-`:+s%%#ss####sc+-.                                  </text>
+</g>
+<g clip-path="url(#clip-21)" style="animation-delay:2.52s">
+<text class="ascii" x="0" y="306">                              *#ss#ssss#ss#ss##c-:s#s##ssssss####s.                                 </text>
+</g>
+<g clip-path="url(#clip-22)" style="animation-delay:2.64s">
+<text class="ascii" x="0" y="320">                             *###s###sss#s#sssssscsss#ssssssss#ss#:                                 </text>
+</g>
+<g clip-path="url(#clip-23)" style="animation-delay:2.76s">
+<text class="ascii" x="0" y="334">                            +%#####s##ss#sssscss#scss#sssssssss###*                                 </text>
+</g>
+<g clip-path="url(#clip-24)" style="animation-delay:2.88s">
+<text class="ascii" x="0" y="348">                           :%###s#%####ss#ssscssscscs#scsssssss##ss`                                </text>
+</g>
+<g clip-path="url(#clip-25)" style="animation-delay:3.00s">
+<text class="ascii" x="0" y="362">                          .*%###s#%#####s#ssscs#ssscs#csssssss##ss#=                                </text>
+</g>
+<g clip-path="url(#clip-26)" style="animation-delay:3.12s">
+<text class="ascii" x="0" y="376">                          *%###ss%%#####s##ssss%#ccs##ssssssss##ss#s                                </text>
+</g>
+<g clip-path="url(#clip-27)" style="animation-delay:3.24s">
+<text class="ascii" x="0" y="390">                         :#####s#%%%#####s%#css####s%#sssss##s###s#s`                               </text>
+</g>
+<g clip-path="url(#clip-28)" style="animation-delay:3.36s">
+<text class="ascii" x="0" y="404">                        .########c%%#####s#%scsssss#%%sssssss####sss+                               </text>
+</g>
+<g clip-path="url(#clip-29)" style="animation-delay:3.48s">
+<text class="ascii" x="0" y="418">                       :s%#%%###*:%%%######%#s#ssccs%%#s######%#ssss+                               </text>
+</g>
+<g clip-path="url(#clip-30)" style="animation-delay:3.60s">
+<text class="ascii" x="0" y="432">                       s%#######.=@#%%#####%%#s#scss%%#s#####%####s#s.                              </text>
+</g>
+<g clip-path="url(#clip-31)" style="animation-delay:3.72s">
+<text class="ascii" x="0" y="446">                       s###sss#* c%##############scs#%%ss###cs%######*                              </text>
+</g>
+<g clip-path="url(#clip-32)" style="animation-delay:3.84s">
+<text class="ascii" x="0" y="460">                       *%####ss*-#s##sssssss#sss###ss%%#css#cs%####ss#:                             </text>
+</g>
+<g clip-path="url(#clip-33)" style="animation-delay:3.96s">
+<text class="ascii" x="0" y="474">                       .#%###sss#%#sss#s######ssss##s#%%#css#+s%#sssss-                             </text>
+</g>
+<g clip-path="url(#clip-34)" style="animation-delay:4.08s">
+<text class="ascii" x="0" y="488">                        :%%###sss#%%#%%%%#####ssssssss#%%#css*c###ssss.                             </text>
+</g>
+<g clip-path="url(#clip-35)" style="animation-delay:4.20s">
+<text class="ascii" x="0" y="502">                         :#%####sss######ss##ssssss#sss%%%#ccs%#ssssss:                             </text>
+</g>
+<g clip-path="url(#clip-36)" style="animation-delay:4.32s">
+<text class="ascii" x="0" y="516">                          `#%####scs#sssssss##ssssssssss##%#c#%#sssssc.                             </text>
+</g>
+<g clip-path="url(#clip-37)" style="animation-delay:4.44s">
+<text class="ascii" x="0" y="530">                           .s%##s*s####sssssssssssssssssss#%###ssssssc                              </text>
+</g>
+<g clip-path="url(#clip-38)" style="animation-delay:4.56s">
+<text class="ascii" x="0" y="544">                            .s%%%s#%####sssssssssssss#ssssss%%###ssssc.                             </text>
+</g>
+<g clip-path="url(#clip-39)" style="animation-delay:4.68s">
+<text class="ascii" x="0" y="558">                            .s%%%%######ssssssssssssssssssss#%c**c#s##`                             </text>
+</g>
+
+        <rect
+            class="cursor"
+            x="0"
+            y="0"
+            width="18"
+            height="560"
+            opacity="0">
+            <animate
+                attributeName="x"
+                from="0"
+                to="800"
+                dur="4.80s"
+                fill="freeze"
+            />
+            <animate
+                attributeName="opacity"
+                values="0;1;1;0"
+                keyTimes="0;0.02;0.95;1"
+                dur="4.80s"
+                fill="freeze"
+            />
+        </rect>
+        
+</svg>
