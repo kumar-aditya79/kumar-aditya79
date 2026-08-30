@@ -9,16 +9,14 @@ OUTPUT_FILE = Path("contrib-heatmap.svg")
 
 USERNAME = "kumar-aditya79"
 
-# GitHub-style colors
 PALETTE = [
-    "#161b22",  # 0 contributions
-    "#0e4429",  # level 1
-    "#006d32",  # level 2
-    "#26a641",  # level 3
-    "#39d353",  # level 4
+    "#161b22",
+    "#0e4429",
+    "#006d32",
+    "#26a641",
+    "#39d353",
 ]
 
-# Layout
 CELL_SIZE = 13
 CELL_GAP = 3
 CELL_STEP = CELL_SIZE + CELL_GAP
@@ -30,7 +28,7 @@ WEEKS = 53
 DAYS = 7
 
 WIDTH = LEFT_MARGIN + WEEKS * CELL_STEP + 20
-HEIGHT = TOP_MARGIN + DAYS * CELL_STEP + 55
+HEIGHT = TOP_MARGIN + DAYS * CELL_STEP + 75
 
 ANIMATION_DELAY = 0.025
 
@@ -47,28 +45,22 @@ def load_data():
 
 
 def create_grid(days):
-    """
-    Convert contribution data into a 53-week × 7-day grid.
-    """
-
     levels = {
-        item["date"]: item["level"]
+        item["date"]: item
         for item in days
     }
 
     if not levels:
         return []
 
-    # Use the latest available date
     latest_date = max(
         datetime.strptime(date, "%Y-%m-%d").date()
         for date in levels
     )
 
-    # Go back roughly one year
     start_date = latest_date - timedelta(days=364)
 
-    # Move start backward to Sunday
+    # Move to Sunday
     start_date -= timedelta(
         days=(start_date.weekday() + 1) % 7
     )
@@ -88,24 +80,52 @@ def create_grid(days):
 
             date_string = current_date.isoformat()
 
-            level = levels.get(
+            contribution = levels.get(
                 date_string,
-                0
-            )
-
-            week_data.append(
                 {
                     "date": date_string,
-                    "level": level,
+                    "count": 0,
+                    "level": "NONE"
                 }
             )
+
+            week_data.append(contribution)
 
         grid.append(week_data)
 
     return grid
 
 
-def create_svg(grid):
+def get_level_number(level):
+    level_map = {
+        "NONE": 0,
+        "FIRST_QUARTILE": 1,
+        "SECOND_QUARTILE": 2,
+        "THIRD_QUARTILE": 3,
+        "FOURTH_QUARTILE": 4,
+
+        # Support numeric levels too
+        "0": 0,
+        "1": 1,
+        "2": 2,
+        "3": 3,
+        "4": 4,
+    }
+
+    if isinstance(level, int):
+        return max(
+            0,
+            min(level, 4)
+        )
+
+    return level_map.get(
+        str(level),
+        0
+    )
+
+
+def create_svg(grid, total_contributions):
+
     svg = []
 
     svg.append(
@@ -113,10 +133,6 @@ def create_svg(grid):
         f'width="{WIDTH}" height="{HEIGHT}" '
         f'viewBox="0 0 {WIDTH} {HEIGHT}">'
     )
-
-    # --------------------------------------------------
-    # CSS animation
-    # --------------------------------------------------
 
     svg.append("""
     <style>
@@ -152,10 +168,7 @@ def create_svg(grid):
     </style>
     """)
 
-    # --------------------------------------------------
     # Background
-    # --------------------------------------------------
-
     svg.append(
         f'<rect width="{WIDTH}" '
         f'height="{HEIGHT}" '
@@ -163,25 +176,30 @@ def create_svg(grid):
         f'fill="#0d1117"/>'
     )
 
-    # --------------------------------------------------
     # Header
-    # --------------------------------------------------
-
     svg.append(
-        f'<text x="20" y="20" '
+        f'<text x="20" y="18" '
         f'fill="#3fb950" '
-        f'font-size="11" '
+        f'font-size="10" '
         f'class="terminal">'
-        f'$ contributions --user {html.escape(USERNAME)}'
+        f'$ contributions --user '
+        f'{html.escape(USERNAME)}'
         f'</text>'
     )
 
-    # --------------------------------------------------
-    # Contribution cells
-    # --------------------------------------------------
+    # Contribution count
+    svg.append(
+        f'<text x="20" y="29" '
+        f'fill="#8b949e" '
+        f'font-size="9" '
+        f'class="terminal">'
+        f'{total_contributions:,} contributions in the last year'
+        f'</text>'
+    )
 
     animation_index = 0
 
+    # Contribution cells
     for week_index, week in enumerate(grid):
 
         for day_index, cell in enumerate(week):
@@ -196,13 +214,31 @@ def create_svg(grid):
                 + day_index * CELL_STEP
             )
 
-            level = cell["level"]
+            level = get_level_number(
+                cell.get("level", "NONE")
+            )
 
             color = PALETTE[
-                min(level, len(PALETTE) - 1)
+                min(
+                    level,
+                    len(PALETTE) - 1
+                )
             ]
 
-            delay = animation_index * ANIMATION_DELAY
+            count = cell.get(
+                "count",
+                0
+            )
+
+            date = cell.get(
+                "date",
+                ""
+            )
+
+            delay = (
+                animation_index
+                * ANIMATION_DELAY
+            )
 
             svg.append(
                 f'<rect '
@@ -215,19 +251,20 @@ def create_svg(grid):
                 f'class="cell" '
                 f'style="animation-delay:{delay:.3f}s">'
                 f'<title>'
-                f'{html.escape(cell["date"])} '
-                f'· level {level}'
+                f'{html.escape(date)} '
+                f'· {count} contributions'
                 f'</title>'
                 f'</rect>'
             )
 
             animation_index += 1
 
-    # --------------------------------------------------
     # Legend
-    # --------------------------------------------------
-
-    legend_y = TOP_MARGIN + DAYS * CELL_STEP + 12
+    legend_y = (
+        TOP_MARGIN
+        + DAYS * CELL_STEP
+        + 12
+    )
 
     svg.append(
         f'<text x="{LEFT_MARGIN}" '
@@ -239,7 +276,9 @@ def create_svg(grid):
         f'</text>'
     )
 
-    legend_start = LEFT_MARGIN + 35
+    legend_start = (
+        LEFT_MARGIN + 35
+    )
 
     for index, color in enumerate(PALETTE):
 
@@ -274,10 +313,7 @@ def create_svg(grid):
         f'</text>'
     )
 
-    # --------------------------------------------------
     # Footer
-    # --------------------------------------------------
-
     svg.append(
         f'<text x="{LEFT_MARGIN}" '
         f'y="{HEIGHT - 8}" '
@@ -304,8 +340,23 @@ def main():
         []
     )
 
+    stats = data.get(
+        "stats",
+        {}
+    )
+
+    total_contributions = stats.get(
+        "total",
+        0
+    )
+
     print(
         f"Loaded {len(days)} contribution days."
+    )
+
+    print(
+        f"Total contributions: "
+        f"{total_contributions}"
     )
 
     print("Building contribution grid...")
@@ -314,7 +365,10 @@ def main():
 
     print("Generating animated heatmap...")
 
-    svg = create_svg(grid)
+    svg = create_svg(
+        grid,
+        total_contributions
+    )
 
     OUTPUT_FILE.write_text(
         svg,

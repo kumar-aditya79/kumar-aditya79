@@ -1,162 +1,136 @@
 from pathlib import Path
 import json
-import re
-from datetime import datetime
+import os
+from datetime import datetime, timedelta
 
 import requests
-from bs4 import BeautifulSoup
 
 
 USERNAME = "kumar-aditya79"
-
-URL = f"https://github.com/users/{USERNAME}/contributions"
-
 OUTPUT_FILE = Path("data/contributions.json")
 
+GRAPHQL_URL = "https://api.github.com/graphql"
 
-def fetch_page():
-    print(f"Fetching contributions for @{USERNAME}...")
 
-    headers = {
-        "User-Agent": "Mozilla/5.0"
+def fetch_contributions():
+    token = os.environ.get("GITHUB_TOKEN")
+
+    if not token:
+        raise RuntimeError(
+            "GITHUB_TOKEN is not set. "
+            "Set it in PowerShell before running this script."
+        )
+
+    today = datetime.utcnow().date()
+    one_year_ago = today - timedelta(days=365)
+
+    query = """
+    query($login: String!, $from: DateTime!, $to: DateTime!) {
+        user(login: $login) {
+            contributionsCollection(
+                from: $from
+                to: $to
+            ) {
+                totalCommitContributions
+                totalIssueContributions
+                totalPullRequestContributions
+                totalPullRequestReviewContributions
+                restrictedContributionsCount
+
+                contributionCalendar {
+                    totalContributions
+
+                    weeks {
+                        contributionDays {
+                            contributionCount
+                            date
+                            contributionLevel
+                        }
+                    }
+                }
+            }
+        }
+    }
+    """
+
+    variables = {
+        "login": USERNAME,
+        "from": f"{one_year_ago}T00:00:00Z",
+        "to": f"{today}T23:59:59Z",
     }
 
-    response = requests.get(
-        URL,
+    headers = {
+        "Authorization": f"Bearer {token}",
+        "Accept": "application/vnd.github+json",
+    }
+
+    print(f"Fetching contributions for @{USERNAME}...")
+
+    response = requests.post(
+        GRAPHQL_URL,
+        json={
+            "query": query,
+            "variables": variables,
+        },
         headers=headers,
-        timeout=30
+        timeout=30,
     )
 
     response.raise_for_status()
 
-    return response.text
+    result = response.json()
 
+    if "errors" in result:
+        raise RuntimeError(
+            f"GitHub GraphQL error:\n{result['errors']}"
+        )
 
-def parse_contributions(html):
-    soup = BeautifulSoup(html, "html.parser")
-
-    days = []
-
-    # GitHub contribution cells
-    for rect in soup.select("td.ContributionCalendar-day"):
-        date = rect.get("data-date")
-        count_text = rect.get("data-level")
-
-        if date and count_text is not None:
-            days.append({
-                "date": date,
-                "level": int(count_text),
-            })
-
-    # Fallback for newer GitHub markup
-    if not days:
-        for element in soup.select("[data-date][data-level]"):
-            date = element.get("data-date")
-            level = element.get("data-level")
-
-            if date and level is not None:
-                days.append({
-                    "date": date,
-                    "level": int(level),
-                })
-
-    return days
-
-
-def calculate_stats(days):
-    if not days:
-        return {
-            "total": 0,
-            "current_streak": 0,
-            "longest_streak": 0,
-            "best_day": None,
-        }
-
-    # GitHub levels:
-    # 0 = no contributions
-    # 1-4 = increasing contribution intensity
-
-    total = 0
-
-    for day in days:
-        # We don't get the exact count from data-level,
-        # so total is calculated from the aria-label when available
-        pass
-
-    # Build a date → level dictionary
-    levels = {
-        day["date"]: day["level"]
-        for day in days
-    }
-
-    dates = sorted(levels.keys())
-
-    # Current streak
-    current_streak = 0
-
-    for date in reversed(dates):
-        if levels[date] > 0:
-            current_streak += 1
-        else:
-            break
-
-    # Longest streak
-    longest_streak = 0
-    streak = 0
-
-    for date in dates:
-        if levels[date] > 0:
-            streak += 1
-            longest_streak = max(
-                longest_streak,
-                streak
-            )
-        else:
-            streak = 0
-
-    # Best contribution level
-    best_day = max(
-        days,
-        key=lambda x: x["level"]
-    )
-
-    return {
-        "total": total,
-        "current_streak": current_streak,
-        "longest_streak": longest_streak,
-        "best_day": best_day,
-    }
+    return result["data"]["user"]["contributionsCollection"]
 
 
 def main():
+
+    collection = fetch_contributions()
+
+    calendar = collection["contributionCalendar"]
+
+    days = []
+
+    for week in calendar["weeks"]:
+        for day in week["contributionDays"]:
+            days.append({
+                "date": day["date"],
+                "count": day["contributionCount"],
+                "level": day["contributionLevel"],
+            })
+
+    output = {
+        "username": USERNAME,
+
+        "generated_at": datetime.utcnow().isoformat() + "Z",
+
+        "stats": {
+            "total": calendar["totalContributions"],
+            "commits": collection["totalCommitContributions"],
+            "issues": collection["totalIssueContributions"],
+            "pull_requests": collection[
+                "totalPullRequestContributions"
+            ],
+            "reviews": collection[
+                "totalPullRequestReviewContributions"
+            ],
+            "restricted": collection[
+                "restrictedContributionsCount"
+            ],
+        },
+
+        "days": days,
+    }
 
     OUTPUT_FILE.parent.mkdir(
         parents=True,
         exist_ok=True
     )
-
-    html = fetch_page()
-
-    days = parse_contributions(html)
-
-    print(f"Found {len(days)} contribution days.")
-
-    if not days:
-        print()
-        print("WARNING: No contribution cells were found.")
-        print("GitHub may have changed its HTML structure.")
-        print()
-        print("Open this URL in your browser:")
-        print(URL)
-
-    stats = calculate_stats(days)
-
-    output = {
-        "username": USERNAME,
-        "generated_at": datetime.utcnow().isoformat() + "Z",
-        "days": days,
-        "stats": stats,
-    }
 
     OUTPUT_FILE.write_text(
         json.dumps(
@@ -167,7 +141,36 @@ def main():
     )
 
     print()
-    print("Done!")
+    print("===================================")
+    print("GitHub contribution data fetched!")
+    print("===================================")
+
+    print(
+        f"Total contributions: "
+        f"{calendar['totalContributions']}"
+    )
+
+    print(
+        f"Commit contributions: "
+        f"{collection['totalCommitContributions']}"
+    )
+
+    print(
+        f"Issue contributions: "
+        f"{collection['totalIssueContributions']}"
+    )
+
+    print(
+        f"Pull request contributions: "
+        f"{collection['totalPullRequestContributions']}"
+    )
+
+    print(
+        f"Pull request reviews: "
+        f"{collection['totalPullRequestReviewContributions']}"
+    )
+
+    print()
     print(f"Created: {OUTPUT_FILE}")
 
 
