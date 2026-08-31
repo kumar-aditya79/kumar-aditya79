@@ -34,7 +34,7 @@
     
 <rect width="903" height="217" rx="10" fill="#0d1117"/>
 <text x="20" y="18" fill="#3fb950" font-size="10" class="terminal">$ contributions --user kumar-aditya79</text>
-<text x="20" y="29" fill="#8b949e" font-size="9" class="terminal">54 contributions in the last year</text>
+<text x="20" y="29" fill="#8b949e" font-size="9" class="terminal">68 contributions in the last year</text>
 <rect x="35" y="30" width="13" height="13" rx="3" fill="#161b22" class="cell" style="animation-delay:0.000s"><title>2025-08-31 · 0 contributions</title></rect>
 <rect x="35" y="46" width="13" height="13" rx="3" fill="#161b22" class="cell" style="animation-delay:0.025s"><title>2025-09-01 · 0 contributions</title></rect>
 <rect x="35" y="62" width="13" height="13" rx="3" fill="#161b22" class="cell" style="animation-delay:0.050s"><title>2025-09-02 · 0 contributions</title></rect>
@@ -378,7 +378,7 @@
 <rect x="803" y="94" width="13" height="13" rx="3" fill="#161b22" class="cell" style="animation-delay:8.500s"><title>2026-08-06 · 0 contributions</title></rect>
 <rect x="803" y="110" width="13" height="13" rx="3" fill="#161b22" class="cell" style="animation-delay:8.525s"><title>2026-08-07 · 0 contributions</title></rect>
 <rect x="803" y="126" width="13" height="13" rx="3" fill="#161b22" class="cell" style="animation-delay:8.550s"><title>2026-08-08 · 0 contributions</title></rect>
-<rect x="819" y="30" width="13" height="13" rx="3" fill="#26a641" class="cell" style="animation-delay:8.575s"><title>2026-08-09 · 6 contributions</title></rect>
+<rect x="819" y="30" width="13" height="13" rx="3" fill="#006d32" class="cell" style="animation-delay:8.575s"><title>2026-08-09 · 6 contributions</title></rect>
 <rect x="819" y="46" width="13" height="13" rx="3" fill="#161b22" class="cell" style="animation-delay:8.600s"><title>2026-08-10 · 0 contributions</title></rect>
 <rect x="819" y="62" width="13" height="13" rx="3" fill="#161b22" class="cell" style="animation-delay:8.625s"><title>2026-08-11 · 0 contributions</title></rect>
 <rect x="819" y="78" width="13" height="13" rx="3" fill="#161b22" class="cell" style="animation-delay:8.650s"><title>2026-08-12 · 0 contributions</title></rect>
@@ -386,8 +386,8 @@
 <rect x="819" y="110" width="13" height="13" rx="3" fill="#161b22" class="cell" style="animation-delay:8.700s"><title>2026-08-14 · 0 contributions</title></rect>
 <rect x="819" y="126" width="13" height="13" rx="3" fill="#161b22" class="cell" style="animation-delay:8.725s"><title>2026-08-15 · 0 contributions</title></rect>
 <rect x="835" y="30" width="13" height="13" rx="3" fill="#0e4429" class="cell" style="animation-delay:8.750s"><title>2026-08-16 · 2 contributions</title></rect>
-<rect x="835" y="46" width="13" height="13" rx="3" fill="#26a641" class="cell" style="animation-delay:8.775s"><title>2026-08-17 · 6 contributions</title></rect>
-<rect x="835" y="62" width="13" height="13" rx="3" fill="#26a641" class="cell" style="animation-delay:8.800s"><title>2026-08-18 · 6 contributions</title></rect>
+<rect x="835" y="46" width="13" height="13" rx="3" fill="#006d32" class="cell" style="animation-delay:8.775s"><title>2026-08-17 · 6 contributions</title></rect>
+<rect x="835" y="62" width="13" height="13" rx="3" fill="#006d32" class="cell" style="animation-delay:8.800s"><title>2026-08-18 · 6 contributions</title></rect>
 <rect x="835" y="78" width="13" height="13" rx="3" fill="#0e4429" class="cell" style="animation-delay:8.825s"><title>2026-08-19 · 2 contributions</title></rect>
 <rect x="835" y="94" width="13" height="13" rx="3" fill="#0e4429" class="cell" style="animation-delay:8.850s"><title>2026-08-20 · 2 contributions</title></rect>
 <rect x="835" y="110" width="13" height="13" rx="3" fill="#0e4429" class="cell" style="animation-delay:8.875s"><title>2026-08-21 · 1 contributions</title></rect>
@@ -399,8 +399,8 @@
 <rect x="851" y="94" width="13" height="13" rx="3" fill="#0e4429" class="cell" style="animation-delay:9.025s"><title>2026-08-27 · 2 contributions</title></rect>
 <rect x="851" y="110" width="13" height="13" rx="3" fill="#0e4429" class="cell" style="animation-delay:9.050s"><title>2026-08-28 · 2 contributions</title></rect>
 <rect x="851" y="126" width="13" height="13" rx="3" fill="#0e4429" class="cell" style="animation-delay:9.075s"><title>2026-08-29 · 1 contributions</title></rect>
-<rect x="867" y="30" width="13" height="13" rx="3" fill="#39d353" class="cell" style="animation-delay:9.100s"><title>2026-08-30 · 10 contributions</title></rect>
-<rect x="867" y="46" width="13" height="13" rx="3" fill="#161b22" class="cell" style="animation-delay:9.125s"><title>2026-08-31 · 0 contributions</title></rect>
+<rect x="867" y="30" width="13" height="13" rx="3" fill="#26a641" class="cell" style="animation-delay:9.100s"><title>2026-08-30 · 10 contributions</title></rect>
+<rect x="867" y="46" width="13" height="13" rx="3" fill="#39d353" class="cell" style="animation-delay:9.125s"><title>2026-08-31 · 14 contributions</title></rect>
 <rect x="867" y="62" width="13" height="13" rx="3" fill="#161b22" class="cell" style="animation-delay:9.150s"><title>2026-09-01 · 0 contributions</title></rect>
 <rect x="867" y="78" width="13" height="13" rx="3" fill="#161b22" class="cell" style="animation-delay:9.175s"><title>2026-09-02 · 0 contributions</title></rect>
 <rect x="867" y="94" width="13" height="13" rx="3" fill="#161b22" class="cell" style="animation-delay:9.200s"><title>2026-09-03 · 0 contributions</title></rect>
