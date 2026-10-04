@@ -208,8 +208,9 @@ def main():
     svg.append("</g>")
 
     highlights = [
-        "Building scalable data pipelines",
+        "Exploring Databricks, ML & Agentic AI",
         "Learning Cloud & Big Data",
+        "Building scalable data pipelines",
         "Exploring Databricks",
     ]
 
