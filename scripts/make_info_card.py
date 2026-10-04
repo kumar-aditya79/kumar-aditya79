@@ -129,12 +129,15 @@ def main():
     # ------------------------------------------
 
     info = [
-        ("Role", "Aspiring Data Engineer"),
-        ("Languages", "Python · SQL · C++"),
+        ("Role", "Aspiring Data & AI Engineer"),
+        ("Languages", "Python · SQL · C++ · JavaScript"),
         ("Big Data", "PySpark · Apache Spark"),
         ("Cloud", "Azure · Databricks"),
         ("Data", "ETL · Data Pipelines"),
-        ("Database", "MySQL · MongoDB"),
+        ("Database", "MySQL · MongoDB · SQLite"),
+        ("ML / AI", "scikit-learn · RAG · Agentic AI"),
+        ("Viz", "Power BI · Tableau · Streamlit"),
+        ("Tools", "Git · GitHub · Docker"),
     ]
 
     start_y = 88
